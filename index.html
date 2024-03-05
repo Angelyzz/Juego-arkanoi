@@ -24,15 +24,23 @@ let x = canvas.width / 2
 
 let y = canvas.height -30
 /*velocidad de la pelota*/
-let dx = 2
+let dx = 3
 
-let dy = -2
+let dy = -3
+
+
 
 const paddleHeight = 10;
 const paddleWidth = 50;
 
 let paddleX = (canvas.width - paddleWidth )/ 2
 let paddleY = canvas.height - paddleHeight - 10
+
+let rightPressed = false
+let leftPressed = false
+
+
+let PADDLE_SENSIBILITY = 7
 
 function drawBall() {
 ctx.beginPath()
@@ -44,10 +52,10 @@ ctx.fill()
 function drawPaddle(){
 ctx.fillStyle = '#09f'
 ctx.fillRect(
-    paddleX,
-    paddleY,
-    paddleWidth,
-    paddleHeight
+    paddleX, // La cordenada X
+    paddleY, // La cordenada Y
+    paddleWidth,// El ancho del dibujo
+    paddleHeight //El alto del dibujo
 )
 }
 function drawBricks() {
@@ -71,6 +79,18 @@ function ballMovement() {
         dy = -dy
     }
 
+    const isBallSameXAsPaddle = 
+    x > paddleX &&
+    x < paddleX + paddleWidth
+
+    const isBallTouchingpaddle = 
+    y + dy > paddleY
+
+
+
+    if (isBallSameXAsPaddle && isBallTouchingpaddle) {
+        dy = -dy
+    }
     if (y + dy > canvas.height - bollRadius) {
         alert("Perdiste")
         document.location.reload()
@@ -78,14 +98,46 @@ function ballMovement() {
 
     x += dx
     y += dy
+
+
 }
 function paddleMovement() {
-
+if (rightPressed && paddleX < canvas.width - paddleWidth) {
+    paddleX += PADDLE_SENSIBILITY
+} else if(leftPressed && paddleX > 0) {
+    paddleX -= PADDLE_SENSIBILITY
+}
 }
 
 function cleanCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 }
+
+
+function initEvenst() {
+    document.addEventListener('keydown', keyDownHandler)
+    document.addEventListener('keyup', keyUpHandler)
+
+    function keyDownHandler(event){
+        const {key} = event
+        if (key === 'Right' || key === 'ArrowRight') {
+            rightPressed = true
+        } else if(key === 'Left' || key === 'ArrowLeft') {
+            leftPressed = true
+        }
+    }
+
+    function keyUpHandler(event){
+        const {key} = event
+        if (key === 'Right' || key === 'ArrowRight') {
+            rightPressed = false
+        } else if(key === 'Left' || key === 'ArrowLeft') {
+            leftPressed = false
+        }
+    }
+
+}
+
 
 function draw() {
     cleanCanvas()
@@ -102,4 +154,5 @@ paddleMovement()
 window.requestAnimationFrame(draw)
 }
 draw()
+initEvenst()
  </script>
