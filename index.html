@@ -5,12 +5,19 @@
 href="style.css">
 
 <canvas></canvas>
+
+<img hidden id="sprite" src="./imagenes/sprite.png" alt="Sprite Arkanoi"/>
+<img hidden id="bricks" src="./imagenes/bricks.png" alt="Sprite bricks Arkanoi"/>
  <script>
 
 
 const canvas = document.querySelector("canvas")
 
 const ctx = canvas.getContext('2d') 
+
+const $sprite = document.querySelector("#sprite")
+const $bricks = document.querySelector("#bricks")
+
 canvas.width = 448
 canvas.height = 400
 
@@ -39,6 +46,42 @@ let paddleY = canvas.height - paddleHeight - 10
 let rightPressed = false
 let leftPressed = false
 
+/*variables de los ladrillos*/
+
+const brickRowsCount = 6;
+const brickColumnCount = 13;
+const brickWidth = 30;
+const brickHeight = 14;
+const brickPadding = 2;
+const brickOffsetTop= 80;
+const brickOffsetLeft = 30;
+const bricks = [];
+
+const BRICK_STATUS = {
+    ACTIVE: 1,
+    DESTROYED: 0
+}
+
+for (let c = 0; c < brickColumnCount; c++) {
+    bricks[c] = []
+    for (let r = 0; r <brickRowsCount; r++) {
+        //calculamos la posicion del laqdrillo en la pantalla
+        const brickX = c* (brickWidth + brickPadding) + brickOffsetLeft
+        const brickY = r * (brickHeight + brickPadding) + brickOffsetTop
+        // Asignar un color alatorio a cada ladrillo
+        const random = Math.floor(Math.random() * 8)
+
+        bricks[c][r] = {
+            x:brickX,
+            y:brickY,
+            status:BRICK_STATUS.ACTIVE,
+            color:random}
+    }
+    
+}
+
+
+
 
 let PADDLE_SENSIBILITY = 7
 
@@ -50,16 +93,38 @@ ctx.fill()
 /*ctx.closePhath()*/
 }
 function drawPaddle(){
-ctx.fillStyle = '#09f'
-ctx.fillRect(
-    paddleX, // La cordenada X
-    paddleY, // La cordenada Y
-    paddleWidth,// El ancho del dibujo
-    paddleHeight //El alto del dibujo
+
+ctx.drawImage(
+
+    //EL click
+    $sprite,     //La imagen
+    29, //el clickX: cordenadas de recorte
+    174, //el clickY: cordenadas de recorte
+    paddleWidth, // el tamaño del recorte
+    paddleHeight,// el tamaño del recorte
+    paddleX, //posision X del dibujo
+    paddleY, //posision Y del dibujo
+    paddleWidth,// ancho del dibujo
+    paddleHeight //alto del dibujo
 )
 }
 function drawBricks() {
 
+for (let c = 0; c < brickColumnCount; c++) {
+
+    for (let r = 0; r <brickRowsCount; r++) {
+        const currentBrick = bricks[c][r]
+        if (currentBrick.status === BRICK_STATUS.DESTROYED) continue
+            ctx.fillStyle = 'yellow'
+            ctx.rect(
+                currentBrick.x,
+                currentBrick.y,
+                brickWidth,
+                brickHeight
+            )
+        ctx.fill()
+    }
+}
 }
 
 function collisionDectection() {
