@@ -54,7 +54,7 @@ const brickWidth = 30;
 const brickHeight = 14;
 const brickPadding = 2;
 const brickOffsetTop= 80;
-const brickOffsetLeft = 30;
+const brickOffsetLeft = 16;
 const bricks = [];
 
 const BRICK_STATUS = {
@@ -75,13 +75,15 @@ for (let c = 0; c < brickColumnCount; c++) {
             x:brickX,
             y:brickY,
             status:BRICK_STATUS.ACTIVE,
-            color:random}
+            color:random
+
+        }
     }
     
 }
 
 
-
+console.log(bricks)
 
 let PADDLE_SENSIBILITY = 7
 
@@ -115,20 +117,45 @@ for (let c = 0; c < brickColumnCount; c++) {
     for (let r = 0; r <brickRowsCount; r++) {
         const currentBrick = bricks[c][r]
         if (currentBrick.status === BRICK_STATUS.DESTROYED) continue
-            ctx.fillStyle = 'yellow'
-            ctx.rect(
-                currentBrick.x,
-                currentBrick.y,
-                brickWidth,
-                brickHeight
-            )
-        ctx.fill()
+
+
+        const clipX = currentBrick.color * 32
+        ctx.drawImage(
+            $bricks,
+            clipX,
+            0,
+            31,
+            14,
+            currentBrick.x,
+            currentBrick.y,
+            brickWidth,brickHeight
+        )
     }
 }
 }
 
 function collisionDectection() {
+    for (let c = 0; c < brickColumnCount; c++) {
 
+    for (let r = 0; r <brickRowsCount; r++) {
+        const currentBrick = bricks[c][r]
+        if (currentBrick.status === BRICK_STATUS.DESTROYED) continue
+
+
+        const isBallSameXAsBrick= 
+        x > currentBrick.x &&
+        x < currentBrick.x + brickWidth
+
+        const isBallSameYAsBrick = 
+        y > currentBrick.y &&
+        y < currentBrick.y + brickHeight
+
+        if (isBallSameXAsBrick && isBallSameYAsBrick ) {
+            dy = -dy
+            currentBrick.status = BRICK_STATUS.DESTROYED
+        }
+    }
+}
 }
 
 function ballMovement() {
