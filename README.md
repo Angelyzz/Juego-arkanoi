@@ -13,7 +13,8 @@ La bola rebotará en la paleta y los ladrillos.
 Ten cuidado de no perder la bola.
 Usa los power-ups a tu favor.
 Sé paciente y estratégico.
-Requisitos
+
+# Requisitos
 
 Windows 10
 Procesador de 2 GHz
