@@ -11,7 +11,7 @@ La bola rebotará en la paleta y los ladrillos.
 # Consejos
 
 Ten cuidado de no perder la bola.
-Usa los power-ups a tu favor.
+
 Sé paciente y estratégico.
 
 # Requisitos
